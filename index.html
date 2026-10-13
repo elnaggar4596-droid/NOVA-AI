@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA AI - مساعدك الذكي</title>
+<style>
+body{margin:0;font-family:system-ui;background:#0a0a0a;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center}
+h1{font-size:3rem;background:linear-gradient(90deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+p{color:#aaa;max-width:500px}
+.box{background:#1a1a1a;border:1px solid #333;padding:20px;border-radius:20px;width:90%;max-width:500px;margin-top:20px}
+input{width:100%;padding:15px;border-radius:12px;border:none;background:#222;color:white;font-size:16px;box-sizing:border-box}
+button{margin-top:10px;width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(90deg,#a855f7,#06b6d4);color:white;font-weight:bold;font-size:16px}
+#answer{margin-top:15px;color:#22c55e}
+</style>
+</head>
+<body>
+<h1>NOVA AI 💜</h1>
+<p>مساعدك الذكي الجديد - اسألني أي حاجة وانا هجاوبك فورا</p>
+<div class="box">
+<input id="q" placeholder="اكتب سؤالك هنا...">
+<button onclick="ask()">اسأل نوفا</button>
+<div id="answer"></div>
+</div>
+<script>
+function ask(){
+let v=document.getElementById('q').value;
+if(!v){document.getElementById('answer').innerText='اكتب سؤال الاول يا نجم!';return}
+document.getElementById('answer').innerText='نوفا بيفكر في: '+v+'... 🚀 (الموقع شغال! هنربطه بالذكاء الاصطناعي قريب)';
+}
+</script>
+</body>
+</html>
