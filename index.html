@@ -1,202 +1,332 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d1b">
 <title>NOVA AI Studio</title>
 <style>
+:root{color-scheme:dark;--bg:#090d1b;--panel:#141a2d;--line:#303a5b;--text:#f5f7ff;--muted:#adb7d5;--a:#8b83ff;--b:#49d9e8}
 *{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;color:#f5f5ff;
- font-family:Arial,Tahoma,sans-serif;
- background:radial-gradient(ellipse at top,#202b57,#0a0b16 65%);
-}
-main{width:min(760px,92%);margin:35px auto}
-header{text-align:center;padding:24px 0}
-.logo{font-size:42px;font-weight:900;letter-spacing:4px;color:#a9a6ff}
-header p{color:#b9bed6;line-height:1.8}
-.panel{
- background:#15182a;border:1px solid #303653;
- border-radius:22px;padding:22px;margin:18px 0;
- box-shadow:0 15px 45px #0003
-}
-label{display:block;margin:16px 0 9px;font-weight:bold}
-textarea,select,input{
- width:100%;padding:14px;border-radius:12px;
- border:1px solid #3b4262;background:#0d1020;
- color:white;font-size:16px;outline:none
-}
-textarea{min-height:130px;resize:vertical;line-height:1.7}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-button{
- width:100%;border:0;border-radius:13px;padding:15px;
- font-size:16px;font-weight:bold;cursor:pointer;margin-top:16px
-}
-.primary{background:linear-gradient(100deg,#8175ff,#42c9ee);color:#080b19}
-.secondary{background:#292e49;color:white}
-button:disabled{opacity:.55;cursor:wait}
-#status{white-space:pre-wrap;line-height:1.9;color:#d4d9f4}
-video{width:100%;border-radius:14px;margin-top:14px;background:#080a13}
-small{color:#aeb5d2;line-height:1.8;display:block;margin-top:10px}
-footer{text-align:center;color:#888eac;padding:20px}
-@media(max-width:520px){.grid{grid-template-columns:1fr}main{margin:12px auto}}
+body{margin:0;background:radial-gradient(ellipse at top,#202b53 0,var(--bg) 62%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;min-height:100vh}
+header{text-align:center;padding:28px 16px 18px}
+.logo{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,var(--a),var(--b));color:#090d1b;font-size:30px;font-weight:950;box-shadow:0 0 35px #8b83ff44}
+h1{font-size:clamp(27px,5vw,38px);margin:12px 0 6px;letter-spacing:1px}
+header p{color:var(--muted);margin:0;line-height:1.8}
+main{width:min(900px,94%);margin:0 auto 35px}
+.panel{background:#141a2def;border:1px solid var(--line);border-radius:20px;padding:clamp(15px,3vw,24px);margin:16px 0;box-shadow:0 16px 45px #0002}
+h2{font-size:19px;margin:0 0 15px}
+label{display:block;margin:14px 0 8px;font-weight:700;font-size:14px}
+textarea,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#0b1121;color:var(--text);font:inherit;outline:none}
+textarea{min-height:120px;resize:vertical;line-height:1.8}
+textarea:focus,select:focus{border-color:var(--a)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+button{font:inherit;font-weight:750;border:0;border-radius:12px;padding:13px 16px;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.primary{width:100%;margin-top:18px;background:linear-gradient(100deg,var(--a),var(--b));color:#080d1b}
+.secondary{background:#293250;color:var(--text)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.actions button{flex:1;min-width:130px}
+.note,.status{font-size:14px;line-height:1.9;color:var(--muted)}
+.status{white-space:pre-wrap;margin:12px 0 0}
+.preview{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#050813}
+canvas{display:block;width:100%;height:auto}
+.scene-list{display:grid;gap:10px}
+.scene{padding:13px;border:1px solid var(--line);border-radius:12px;background:#0b1121}
+.scene strong{color:var(--b)}
+.scene p{margin:7px 0 0;line-height:1.8;color:#e0e6fa}
+a{color:#aeb7ff}
+footer{text-align:center;color:#858eae;font-size:12px;padding:20px}
+@media(max-width:540px){.grid{grid-template-columns:1fr}header{padding-top:20px}}
 </style>
 </head>
 <body>
-<main>
 <header>
- <div class="logo">NOVA AI</div>
- <h1>استوديو صناعة الفيديو</h1>
- <p>اكتب فكرتك، وحدد أسلوب الفيديو، وابدأ رحلة الإنشاء.</p>
+  <div class="logo" aria-hidden="true">N</div>
+  <h1>NOVA AI Studio</h1>
+  <p>حوّل فكرتك إلى مشروع فيديو — من مكان واحد</p>
 </header>
 
-<section class="panel">
- <label for="idea">🎬 إيه فكرة الفيديو اللي عايزها؟</label>
- <textarea id="idea" placeholder="مثال: سر بناء الأهرامات بأسلوب وثائقي مشوّق..."></textarea>
+<main>
+  <section class="panel">
+    <h2>🎬 إعداد الفيديو</h2>
+    <label for="idea">فكرة الفيديو</label>
+    <textarea id="idea" maxlength="1200" placeholder="مثال: سر بناء الأهرامات بأسلوب وثائقي مشوّق..."></textarea>
+    <div class="grid">
+      <div>
+        <label for="duration">المدة</label>
+        <select id="duration">
+          <option value="15">15 ثانية</option>
+          <option value="30" selected>30 ثانية</option>
+          <option value="45">45 ثانية</option>
+          <option value="60">60 ثانية</option>
+        </select>
+      </div>
+      <div>
+        <label for="style">الأسلوب</label>
+        <select id="style">
+          <option value="documentary">وثائقي سينمائي</option>
+          <option value="mystery">غموض وأسرار</option>
+          <option value="science">علوم وفضاء</option>
+          <option value="history">تاريخ وحضارات</option>
+          <option value="animation">رسوم متحركة</option>
+          <option value="story">قصة قصيرة</option>
+        </select>
+      </div>
+      <div>
+        <label for="language">لغة التعليق الصوتي</label>
+        <select id="language">
+          <option value="ar">العربية</option>
+          <option value="en">الإنجليزية</option>
+        </select>
+      </div>
+      <div>
+        <label for="format">مقاس الفيديو</label>
+        <select id="format">
+          <option value="landscape">يوتيوب أفقي 16:9</option>
+          <option value="vertical">Shorts عمودي 9:16</option>
+        </select>
+      </div>
+    </div>
+    <button class="primary" id="create">✨ جهّز الفيديو</button>
+    <p class="note">هذه النسخة تنشئ معاينة متحركة وتصدّرها كملف WebM محليًا إن كان متصفحك يدعم ذلك. توليد لقطات واقعية بالذكاء الاصطناعي يحتاج خدمة خارجية.</p>
+    <div id="status" class="status" role="status" aria-live="polite">اكتب فكرتك ثم اضغط «جهّز الفيديو».</div>
+  </section>
 
- <div class="grid">
-  <div>
-   <label for="duration">مدة الفيديو</label>
-   <select id="duration">
-    <option value="15">15 ثانية</option>
-    <option value="30" selected>30 ثانية</option>
-    <option value="45">45 ثانية</option>
-    <option value="60">دقيقة</option>
-   </select>
-  </div>
-  <div>
-   <label for="style">أسلوب الفيديو</label>
-   <select id="style">
-    <option value="cinematic">سينمائي واقعي</option>
-    <option value="documentary">وثائقي</option>
-    <option value="animation">رسوم متحركة</option>
-    <option value="fantasy">خيالي</option>
-   </select>
-  </div>
-  <div>
-   <label for="language">لغة التعليق الصوتي</label>
-   <select id="language">
-    <option value="ar">العربية</option>
-    <option value="en">الإنجليزية</option>
-   </select>
-  </div>
-  <div>
-   <label for="format">مقاس الفيديو</label>
-   <select id="format">
-    <option value="9:16">عمودي — Shorts</option>
-    <option value="16:9">أفقي — YouTube</option>
-   </select>
-  </div>
- </div>
+  <section class="panel">
+    <h2>📽️ معاينة متحركة</h2>
+    <div class="preview"><canvas id="canvas" width="1280" height="720"></canvas></div>
+    <div class="actions">
+      <button class="secondary" id="play">▶ تشغيل المعاينة</button>
+      <button class="secondary" id="stop">⏹ إيقاف</button>
+      <button class="secondary" id="export">⬇ تصدير الفيديو</button>
+    </div>
+    <p class="note">التصدير يسجّل حركة الخلفية والعناوين في الفيديو. صوت قراءة النص لا يُدمج في الملف في هذه النسخة.</p>
+    <a id="downloadLink" hidden download="NOVA-video.webm">تنزيل الفيديو</a>
+  </section>
 
- <button class="primary" id="generate">✨ ابدأ إنشاء الفيديو</button>
- <small>يلزم توصيل خادم آمن وخدمة توليد فيديو حقيقية قبل إنشاء المقاطع.</small>
-</section>
+  <section class="panel">
+    <h2>🧩 مشاهد الفيديو</h2>
+    <div id="scenes" class="scene-list"><p class="note">ستظهر المشاهد بعد تجهيز فكرتك.</p></div>
+  </section>
 
-<section class="panel">
- <h2>📽️ نتيجة الإنشاء</h2>
- <p id="status" role="status" aria-live="polite">فيديوهاتك هتظهر هنا بعد ربط خدمة التوليد.</p>
- <video id="preview" controls playsinline hidden></video>
- <a id="download" hidden download="NOVA-video.mp4">
-  <button class="secondary">⬇️ تنزيل الفيديو MP4</button>
- </a>
-</section>
+  <section class="panel">
+    <h2>🎙️ نص التعليق الصوتي</h2>
+    <p id="script" class="status">سيظهر النص هنا.</p>
+    <div class="actions">
+      <button class="secondary" id="speak">🔊 قراءة النص</button>
+      <button class="secondary" id="stopSpeak">إيقاف الصوت</button>
+      <button class="secondary" id="copy">نسخ النص</button>
+    </div>
+    <p class="note">القراءة تعتمد على الأصوات المتوفرة في جهازك ومتصفحك، ولا تُدمج تلقائيًا داخل الفيديو.</p>
+  </section>
 
-<footer>NOVA AI Studio · مساحة إبداعك تبدأ من هنا</footer>
+  <section class="panel">
+    <h2>🔌 ربط توليد الفيديو الحقيقي</h2>
+    <p class="note">لإنشاء مشاهد واقعية متحركة بالذكاء الاصطناعي، يحتاج NOVA إلى خادم خلفي آمن يتصل بمزوّد توليد فيديو. يوضع مفتاح API على الخادم فقط، وليس داخل ملف GitHub العام. قد تكون الخدمات المجانية محدودة أو تتطلب رصيدًا؛ هذه الواجهة لا تدّعي أنها متصلة حاليًا بخدمة توليد خارجية.</p>
+  </section>
 </main>
+<footer>NOVA AI Studio · نسخة تجريبية محلية</footer>
 
 <script>
-const $ = id => document.getElementById(id);
-const button = $("generate");
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const canvas = $("canvas");
+  const ctx = canvas.getContext("2d");
+  let scenes = [], narration = "", raf = 0, startTime = 0, exportTimer = null;
+  let recorder = null, chunks = [], exportStream = null, exporting = false;
+  let sceneDuration = 4;
 
-/*
-  بعد تجهيز الخادم، ضع عنوانه هنا.
-  مثال: https://your-server.example.com
-  لا تضع مفتاح API سريًا في هذا الملف.
-*/
-const API_BASE = "";
+  const headings = {
+    ar: {
+      documentary:["السؤال الذي يفتح الحكاية","ما وراء التفاصيل","الأدلة والسياق","الصورة الكاملة","الخلاصة"],
+      mystery:["لغز يثير الفضول","السؤال الكبير","قرائن تستحق الانتباه","نراجع ما نعرفه","ما الذي نستنتجه؟"],
+      science:["الفكرة المدهشة","كيف يحدث ذلك؟","الجزء الأهم","ما الذي تقوله الأدلة؟","ماذا تعلّمنا؟"],
+      history:["رحلة إلى الماضي","بداية الحكاية","تفاصيل من الزمن القديم","ما الذي تغيّر؟","الأثر الذي بقي"],
+      animation:["عالم جديد","الشخصية الرئيسية","العقبة المفاجئة","لحظة التحول","النهاية"],
+      story:["تبدأ الحكاية","حدث غير متوقع","تتوالى الأسئلة","لحظة الاكتشاف","الخاتمة"]
+    },
+    en: {
+      documentary:["The opening question","Beyond the details","Evidence and context","The bigger picture","The takeaway"],
+      mystery:["A curious mystery","The big question","Clues to consider","Reviewing the facts","What can we conclude?"],
+      science:["An intriguing idea","How does it happen?","The key detail","What does evidence say?","What we learned"],
+      history:["A journey to the past","The beginning","Details from another age","What changed?","A lasting legacy"],
+      animation:["A new world","The main character","An unexpected obstacle","The turning point","The ending"],
+      story:["The story begins","Something unexpected","Questions unfold","The discovery","The conclusion"]
+    }
+  };
+  const bridges = {
+    ar:[
+      "لنبدأ بالسؤال الأساسي ونفهم خلفية الموضوع.",
+      "عند النظر إلى التفاصيل، تظهر جوانب جديدة تستحق الفحص.",
+      "نربط المعلومات بالسياق حتى لا نعتمد على التخمين وحده.",
+      "تساعدنا هذه الصورة على فهم الفكرة بصورة أوضح.",
+      "والآن نلخّص أهم ما يمكن استخلاصه من الموضوع."
+    ],
+    en:[
+      "Let's begin with the central question and its context.",
+      "Looking closely reveals details worth examining.",
+      "We connect the information to context rather than relying on guesses.",
+      "This wider view helps make the idea clearer.",
+      "Now let's summarize the main takeaway."
+    ]
+  };
 
-button.addEventListener("click", async () => {
- const idea = $("idea").value.trim();
+  function status(message){ $("status").textContent = message; }
+  function setCanvasSize(){
+    if($("format").value === "vertical"){ canvas.width=720; canvas.height=1280; }
+    else { canvas.width=1280; canvas.height=720; }
+    drawFrame(0, scenes[0] || {title:"NOVA AI",text:"اكتب فكرة وابدأ"});
+  }
+  function makeScenes(idea, lang, style, duration){
+    const count = duration <= 15 ? 3 : duration <= 30 ? 4 : 5;
+    const titles = (headings[lang] && headings[lang][style]) || headings[lang].documentary;
+    const bridge = bridges[lang] || bridges.ar;
+    return Array.from({length:count},(_,i)=>({
+      title:titles[i],
+      text:(lang==="ar" ? "موضوع الفيديو: " : "Video topic: ") + idea + ". " + bridge[i]
+    }));
+  }
+  function drawWrapped(text,x,y,maxWidth,lineHeight,maxLines=3){
+    const words=String(text).split(/\s+/); let line="",lines=[];
+    for(const word of words){
+      const test=line ? line+" "+word : word;
+      if(ctx.measureText(test).width>maxWidth && line){lines.push(line);line=word;}
+      else line=test;
+    }
+    if(line) lines.push(line);
+    if(lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]+="…";}
+    lines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
+  }
+  function drawFrame(ms, scene){
+    const w=canvas.width,h=canvas.height,t=ms/1000;
+    const grad=ctx.createLinearGradient(Math.sin(t*.25)*w*.4,0,w,h);
+    grad.addColorStop(0,"#091329");grad.addColorStop(.52,"#182b52");grad.addColorStop(1,"#3a1e50");
+    ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+    for(let i=0;i<105;i++){
+      const x=(i*173.3+t*(8+i%5)*3)%w;
+      const y=(i*97.7+Math.sin(t*.7+i)*24)%h;
+      ctx.globalAlpha=.25+.55*(.5+.5*Math.sin(t+i));
+      ctx.fillStyle=i%4===0?"#55e6db":"#e2e9ff";
+      ctx.beginPath();ctx.arc(x,y,1+i%3,0,Math.PI*2);ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    const gx=w*(.25+.5*(.5+.5*Math.sin(t*.25)));
+    const glow=ctx.createRadialGradient(gx,h*.42,5,gx,h*.42,w*.4);
+    glow.addColorStop(0,"#547cff38");glow.addColorStop(1,"#547cff00");
+    ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+    ctx.fillStyle="#05091688";ctx.beginPath();ctx.moveTo(0,h*.77);
+    for(let x=0;x<=w;x+=12)ctx.lineTo(x,h*.77+Math.sin(x*.012+t)*13+Math.sin(x*.004-t)*22);
+    ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();ctx.fill();
+    ctx.textAlign="center";ctx.direction="rtl";
+    ctx.fillStyle="#55e6db";ctx.font=`bold ${Math.round(h*.035)}px system-ui`;
+    ctx.fillText("N O V A   A I",w/2,h*.15);
+    ctx.fillStyle="#fff";ctx.font=`bold ${Math.round(h*.058)}px system-ui`;
+    drawWrapped(scene.title,w/2,h*.43,w*.82,h*.075,3);
+    ctx.fillStyle="#d9e4ff";ctx.font=`${Math.round(h*.03)}px system-ui`;
+    drawWrapped(scene.text,w/2,h*.61,w*.8,h*.05,3);
+    ctx.fillStyle="#9eb3dc";ctx.font=`${Math.round(h*.021)}px system-ui`;
+    ctx.fillText("NOVA AI STUDIO",w/2,h*.92);
+  }
+  function renderSceneList(){
+    const container=$("scenes");container.replaceChildren();
+    scenes.forEach((s,i)=>{
+      const card=document.createElement("article");card.className="scene";
+      const title=document.createElement("strong");title.textContent=`المشهد ${i+1}: ${s.title}`;
+      const p=document.createElement("p");p.textContent=s.text;
+      card.append(title,p);container.append(card);
+    });
+    narration=scenes.map(s=>s.text).join("\n\n");
+    $("script").textContent=narration || "سيظهر النص هنا.";
+  }
+  function stopAnimation(){cancelAnimationFrame(raf);raf=0;}
+  function animate(){
+    stopAnimation();startTime=performance.now();
+    const loop=now=>{
+      const elapsed=(now-startTime)/1000;
+      const index=scenes.length ? Math.min(scenes.length-1,Math.floor(elapsed/sceneDuration)%scenes.length):0;
+      drawFrame(now-startTime,scenes[index]||{title:"NOVA AI",text:"اكتب فكرتك وابدأ"});
+      raf=requestAnimationFrame(loop);
+    };
+    raf=requestAnimationFrame(loop);
+  }
+  $("create").addEventListener("click",()=>{
+    const idea=$("idea").value.trim();
+    if(!idea){status("اكتب فكرة الفيديو أولًا.");$("idea").focus();return;}
+    scenes=makeScenes(idea,$("language").value,$("style").value,Number($("duration").value));
+    sceneDuration=Number($("duration").value)/scenes.length;
+    renderSceneList();setCanvasSize();animate();
+    status("تم تجهيز معاينة متحركة ومشاهد نصية. هذه النسخة لا تتصل بعد بخدمة توليد فيديو بالذكاء الاصطناعي.");
+  });
+  $("play").addEventListener("click",()=>{
+    if(!scenes.length){status("اكتب فكرة ثم اضغط «جهّز الفيديو» أولًا.");return;}
+    animate();status("المعاينة تعمل.");
+  });
+  $("stop").addEventListener("click",()=>{
+    stopAnimation();drawFrame(0,scenes[0]||{title:"NOVA AI",text:"تم إيقاف المعاينة"});status("تم إيقاف المعاينة.");
+  });
+  $("format").addEventListener("change",setCanvasSize);
 
- if (!idea) {
-  $("status").textContent = "اكتب فكرة الفيديو الأول، وبعدها اضغط إنشاء.";
-  $("idea").focus();
-  return;
- }
-
- if (!API_BASE) {
-  $("status").textContent =
-   "الواجهة جاهزة، لكن خدمة توليد الفيديو لم تُربط بعد.\n\n" +
-   "عشان NOVA يصنع فيديو متحرك حقيقي بصوت ويتيح تنزيل MP4، " +
-   "لازم نجهز خادمًا آمنًا ونوصله بخدمة توليد الفيديو. " +
-   "مجرد نشر هذا الملف على GitHub لا ينشئ الفيديو.";
-  return;
- }
-
- button.disabled = true;
- button.textContent = "⏳ جاري إرسال طلب الإنشاء...";
- $("status").textContent = "جاري الاتصال بخدمة توليد الفيديو...";
- $("preview").hidden = true;
- $("download").hidden = true;
-
- try {
-  const response = await fetch(API_BASE + "/api/generate", {
-   method: "POST",
-   headers: {"Content-Type":"application/json"},
-   body: JSON.stringify({
-    idea,
-    duration: Number($("duration").value),
-    style: $("style").value,
-    language: $("language").value,
-    format: $("format").value
-   })
+  $("speak").addEventListener("click",()=>{
+    if(!narration){status("جهّز المشاهد أولًا.");return;}
+    if(!("speechSynthesis" in window)){status("متصفحك لا يدعم القراءة الصوتية.");return;}
+    speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(narration);
+    utterance.lang=$("language").value==="ar"?"ar":"en-US";utterance.rate=.9;
+    speechSynthesis.speak(utterance);
+  });
+  $("stopSpeak").addEventListener("click",()=>{if("speechSynthesis" in window)speechSynthesis.cancel();});
+  $("copy").addEventListener("click",async()=>{
+    if(!narration){status("جهّز المشاهد أولًا.");return;}
+    try{await navigator.clipboard.writeText(narration);status("تم نسخ نص التعليق الصوتي.");}
+    catch(e){status("النسخ التلقائي غير متاح في هذا المتصفح. يمكنك تحديد النص ونسخه يدويًا.");}
   });
 
-  if (!response.ok) throw new Error("تعذر بدء إنشاء الفيديو.");
-  const data = await response.json();
-  if (!data.id) throw new Error("الخادم لم يُرجع رقم مهمة.");
-
-  $("status").textContent = "تم إرسال الطلب. جاري انتظار الفيديو...";
-  let ready = false;
-
-  for (let i = 0; i < 120; i++) {
-   await new Promise(resolve => setTimeout(resolve, 5000));
-   const result = await fetch(
-    API_BASE + "/api/status/" + encodeURIComponent(data.id)
-   );
-   if (!result.ok) throw new Error("تعذر التحقق من حالة الفيديو.");
-
-   const job = await result.json();
-   $("status").textContent = job.message || "جاري إنشاء الفيديو...";
-
-   if (job.status === "failed")
-    throw new Error(job.message || "فشل إنشاء الفيديو.");
-
-   if (job.status === "completed" && job.videoUrl) {
-    const url = new URL(job.videoUrl, API_BASE);
-    if (url.protocol !== "https:" && url.hostname !== "localhost")
-     throw new Error("رابط الفيديو غير آمن.");
-
-    $("preview").src = url.href;
-    $("preview").hidden = false;
-    $("download").href = url.href;
-    $("download").hidden = false;
-    $("status").textContent = "اكتمل الفيديو! يمكنك مشاهدته وتنزيله.";
-    ready = true;
-    break;
-   }
-  }
-
-  if (!ready) throw new Error("استغرق الإنشاء وقتًا أطول من المتوقع.");
- } catch (error) {
-  $("status").textContent = "لم يكتمل الإنشاء: " + error.message;
- } finally {
-  button.disabled = false;
-  button.textContent = "✨ ابدأ إنشاء الفيديو";
- }
-});
+  $("export").addEventListener("click",()=>{
+    if(!scenes.length){status("جهّز المشاهد أولًا قبل التصدير.");return;}
+    if(!canvas.captureStream || !window.MediaRecorder){status("التصدير غير مدعوم في هذا المتصفح. جرّب أحدث إصدار من Chrome.");return;}
+    if(exporting)return;
+    stopAnimation();
+    const mimeTypes=["video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm"];
+    const mimeType=mimeTypes.find(type=>MediaRecorder.isTypeSupported(type));
+    if(!mimeType){status("المتصفح لا يدعم تنسيق فيديو مناسبًا للتصدير.");return;}
+    chunks=[];exporting=true;
+    exportStream=canvas.captureStream(30);
+    try{recorder=new MediaRecorder(exportStream,{mimeType});}
+    catch(e){exporting=false;exportStream.getTracks().forEach(t=>t.stop());status("تعذر بدء تصدير الفيديو في هذا المتصفح.");return;}
+    recorder.ondataavailable=e=>{if(e.data && e.data.size)chunks.push(e.data);};
+    recorder.onerror=()=>{
+      exporting=false;exportStream?.getTracks().forEach(t=>t.stop());
+      status("حدث خطأ أثناء تسجيل الفيديو.");
+    };
+    recorder.onstop=()=>{
+      exporting=false;exportStream?.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(chunks,{type:mimeType});
+      const url=URL.createObjectURL(blob);
+      const link=$("downloadLink");
+      if(link.dataset.oldUrl)URL.revokeObjectURL(link.dataset.oldUrl);
+      link.href=url;link.dataset.oldUrl=url;link.hidden=false;
+      link.download="NOVA-video.webm";
+      link.textContent="اضغط هنا لتنزيل الفيديو (WebM)";
+      status("اكتمل التصدير. اضغط رابط التنزيل لحفظ ملف الفيديو.");
+      animate();
+    };
+    recorder.start();
+    const totalMs=Math.max(5000,Number($("duration").value)*1000);
+    const begin=performance.now();
+    const loop=now=>{
+      const elapsed=now-begin;
+      const idx=Math.min(scenes.length-1,Math.floor(elapsed/totalMs*scenes.length));
+      drawFrame(elapsed,scenes[idx]);
+      if(elapsed>=totalMs){if(recorder && recorder.state!=="inactive")recorder.stop();return;}
+      raf=requestAnimationFrame(loop);
+    };
+    raf=requestAnimationFrame(loop);
+    status("جاري تسجيل المعاينة المتحركة. اترك الصفحة مفتوحة حتى ينتهي التصدير...");
+  });
+  setCanvasSize();
+})();
 </script>
 </body>
 </html>
