@@ -1,32 +1,144 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOVA AI - مساعدك الذكي</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090914">
+<title>NOVA AI Studio</title>
 <style>
-body{margin:0;font-family:system-ui;background:#0a0a0a;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center}
-h1{font-size:3rem;background:linear-gradient(90deg,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-p{color:#aaa;max-width:500px}
-.box{background:#1a1a1a;border:1px solid #333;padding:20px;border-radius:20px;width:90%;max-width:500px;margin-top:20px}
-input{width:100%;padding:15px;border-radius:12px;border:none;background:#222;color:white;font-size:16px;box-sizing:border-box}
-button{margin-top:10px;width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(90deg,#a855f7,#06b6d4);color:white;font-weight:bold;font-size:16px}
-#answer{margin-top:15px;color:#22c55e}
+*{box-sizing:border-box}
+body{margin:0;background:#090914;color:#f5f3ff;font-family:system-ui,Arial,sans-serif}
+main{width:min(760px,92%);margin:35px auto}
+header{text-align:center;padding:24px 0}
+.logo{font-size:39px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,#c084fc,#22d3ee);color:transparent;background-clip:text}
+header p,.muted{color:#a5a3b8;line-height:1.8}
+.panel{background:#131322;border:1px solid #292940;border-radius:20px;padding:20px;margin:16px 0}
+label{display:block;margin:15px 0 8px;font-weight:650}
+textarea,select{width:100%;padding:14px;background:#0c0c19;border:1px solid #35354e;border-radius:12px;color:white;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button{border:0;border-radius:12px;padding:14px 18px;font:inherit;font-weight:750;cursor:pointer}
+.primary{width:100%;margin-top:16px;color:#080816;background:linear-gradient(90deg,#c084fc,#67e8f9)}
+.secondary{background:#27273d;color:white;margin-top:10px}
+.result{white-space:pre-wrap;line-height:1.9;overflow-wrap:anywhere}
+.hidden{display:none}
+.tag{display:inline-block;background:#28213e;color:#d8b4fe;padding:5px 10px;border-radius:20px;font-size:13px}
+footer{text-align:center;color:#8886a0;font-size:13px;padding:20px}
 </style>
 </head>
 <body>
-<h1>NOVA AI 💜</h1>
-<p>مساعدك الذكي الجديد - اسألني أي حاجة وانا هجاوبك فورا</p>
-<div class="box">
-<input id="q" placeholder="اكتب سؤالك هنا...">
-<button onclick="ask()">اسأل نوفا</button>
-<div id="answer"></div>
-</div>
+<main>
+<header>
+<div class="logo">NOVA AI</div>
+<div class="tag">VIDEO CREATOR STUDIO</div>
+<p>من فكرتك إلى خطة فيديو جاهزة للإنتاج 🎬</p>
+</header>
+
+<section class="panel">
+<h2>اصنع فكرة فيديو جديدة</h2>
+<p class="muted">اكتب فكرتك، وNOVA هيجهز لك سيناريو ومشاهد ووصفًا للإنتاج.</p>
+
+<label for="idea">فكرة الفيديو</label>
+<textarea id="idea" placeholder="مثال: رحلة إلى كوكب غريب في المستقبل..."></textarea>
+
+<label for="duration">مدة الفيديو</label>
+<select id="duration">
+<option value="30">30 ثانية</option>
+<option value="45" selected>45 ثانية</option>
+<option value="60">60 ثانية</option>
+</select>
+
+<label for="style">أسلوب الفيديو</label>
+<select id="style">
+<option>سينمائي واقعي</option>
+<option>أنيميشن</option>
+<option>وثائقي</option>
+<option>رعب خيالي بدون مشاهد دموية</option>
+<option>معلومات وحقائق</option>
+</select>
+
+<label for="voice">لغة التعليق الصوتي</label>
+<select id="voice">
+<option>العربية</option>
+<option>الإنجليزية</option>
+<option>بدون تعليق صوتي</option>
+</select>
+
+<button class="primary" onclick="createPlan()">جهّز خطة الفيديو ✨</button>
+</section>
+
+<section id="output" class="panel hidden">
+<h2>🎬 خطة فيديو NOVA</h2>
+<p class="muted">راجع الخطة وعدّلها قبل استخدامها في خدمة توليد الفيديو.</p>
+<div id="result" class="result"></div>
+<button class="secondary" onclick="copyPlan()">نسخ الخطة كاملة</button>
+<p id="notice" class="muted"></p>
+</section>
+
+<footer>NOVA AI Studio · النسخة التجريبية</footer>
+</main>
+
 <script>
-function ask(){
-let v=document.getElementById('q').value;
-if(!v){document.getElementById('answer').innerText='اكتب سؤال الاول يا نجم!';return}
-document.getElementById('answer').innerText='نوفا بيفكر في: '+v+'... 🚀 (الموقع شغال! هنربطه بالذكاء الاصطناعي قريب)';
+let currentPlan = "";
+
+function createPlan(){
+ const idea = document.getElementById("idea").value.trim();
+ const duration = Number(document.getElementById("duration").value);
+ const style = document.getElementById("style").value;
+ const voice = document.getElementById("voice").value;
+ const output = document.getElementById("output");
+ const result = document.getElementById("result");
+ const notice = document.getElementById("notice");
+
+ if(!idea){
+  alert("اكتب فكرة الفيديو الأول يا نجم!");
+  return;
+ }
+
+ const count = duration === 30 ? 3 : duration === 45 ? 4 : 5;
+ const sceneTime = Math.floor(duration / count);
+ const scenes = [];
+
+ for(let i=0;i<count;i++){
+  scenes.push(
+   "المشهد "+(i+1)+" ("+(i*sceneTime)+"–"+(i===count-1?duration:(i+1)*sceneTime)+" ثانية):\n"+
+   "اعرض جزءًا بصريًا مختلفًا يخدم الفكرة: "+idea+
+   "\nالأسلوب: "+style+
+   "\nالحركة: حركة كاميرا ناعمة وانتقال مناسب للمشهد.\n"
+  );
+ }
+
+ currentPlan =
+ "NOVA AI — خطة إنتاج فيديو\n\n"+
+ "الفكرة: "+idea+"\n"+
+ "المدة: "+duration+" ثانية\n"+
+ "الأسلوب: "+style+"\n"+
+ "لغة الصوت: "+voice+"\n\n"+
+ "الافتتاحية:\n"+
+ "ابدأ بلقطة جذابة تشد الانتباه وتقدم موضوع الفيديو بسرعة.\n\n"+
+ "المشاهد:\n\n"+scenes.join("\n")+
+ "\nالتعليق الصوتي:\n"+
+ (voice==="بدون تعليق صوتي"?"لا يوجد تعليق صوتي؛ اعتمد على الصورة والموسيقى المناسبة المرخّصة.":"اكتب تعليقًا صوتيًا "+voice+" متوافقًا مع المشاهد، واضحًا ومختصرًا.")+
+ "\n\nالنهاية:\nاختم بلقطة تلخص الفكرة وتناسب محتوى يوتيوب.\n\n"+
+ "وصف الإنتاج:\n"+
+ "أنشئ فيديو "+style+" عن "+idea+
+ "، مدته "+duration+" ثانية، بنسبة أبعاد 16:9 للفيديو العادي أو 9:16 للشورتس، مع ثبات شكل الشخصيات والألوان بين المشاهد. تجنب النصوص المشوهة داخل الصورة.";
+
+ result.textContent = currentPlan;
+ notice.textContent = "هذه خطة إنتاج مولّدة بقوالب محلية، وليست فيديو أو استجابة من نموذج ذكاء اصطناعي متصل.";
+ output.classList.remove("hidden");
+ output.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+async function copyPlan(){
+ if(!currentPlan)return;
+ const notice = document.getElementById("notice");
+ try{
+  await navigator.clipboard.writeText(currentPlan);
+  notice.textContent="تم نسخ الخطة. يمكنك لصقها في المكان الذي تريد.";
+ }catch(e){
+  notice.textContent="حدد نص الخطة وانسخه يدويًا من الشاشة.";
+ }
 }
 </script>
 </body>
