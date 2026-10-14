@@ -4,142 +4,199 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#090914">
 <title>NOVA AI Studio</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090914;color:#f5f3ff;font-family:system-ui,Arial,sans-serif}
+body{
+ margin:0;min-height:100vh;color:#f5f5ff;
+ font-family:Arial,Tahoma,sans-serif;
+ background:radial-gradient(ellipse at top,#202b57,#0a0b16 65%);
+}
 main{width:min(760px,92%);margin:35px auto}
 header{text-align:center;padding:24px 0}
-.logo{font-size:39px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,#c084fc,#22d3ee);color:transparent;background-clip:text}
-header p,.muted{color:#a5a3b8;line-height:1.8}
-.panel{background:#131322;border:1px solid #292940;border-radius:20px;padding:20px;margin:16px 0}
-label{display:block;margin:15px 0 8px;font-weight:650}
-textarea,select{width:100%;padding:14px;background:#0c0c19;border:1px solid #35354e;border-radius:12px;color:white;font:inherit}
-textarea{min-height:110px;resize:vertical}
-button{border:0;border-radius:12px;padding:14px 18px;font:inherit;font-weight:750;cursor:pointer}
-.primary{width:100%;margin-top:16px;color:#080816;background:linear-gradient(90deg,#c084fc,#67e8f9)}
-.secondary{background:#27273d;color:white;margin-top:10px}
-.result{white-space:pre-wrap;line-height:1.9;overflow-wrap:anywhere}
-.hidden{display:none}
-.tag{display:inline-block;background:#28213e;color:#d8b4fe;padding:5px 10px;border-radius:20px;font-size:13px}
-footer{text-align:center;color:#8886a0;font-size:13px;padding:20px}
+.logo{font-size:42px;font-weight:900;letter-spacing:4px;color:#a9a6ff}
+header p{color:#b9bed6;line-height:1.8}
+.panel{
+ background:#15182a;border:1px solid #303653;
+ border-radius:22px;padding:22px;margin:18px 0;
+ box-shadow:0 15px 45px #0003
+}
+label{display:block;margin:16px 0 9px;font-weight:bold}
+textarea,select,input{
+ width:100%;padding:14px;border-radius:12px;
+ border:1px solid #3b4262;background:#0d1020;
+ color:white;font-size:16px;outline:none
+}
+textarea{min-height:130px;resize:vertical;line-height:1.7}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+button{
+ width:100%;border:0;border-radius:13px;padding:15px;
+ font-size:16px;font-weight:bold;cursor:pointer;margin-top:16px
+}
+.primary{background:linear-gradient(100deg,#8175ff,#42c9ee);color:#080b19}
+.secondary{background:#292e49;color:white}
+button:disabled{opacity:.55;cursor:wait}
+#status{white-space:pre-wrap;line-height:1.9;color:#d4d9f4}
+video{width:100%;border-radius:14px;margin-top:14px;background:#080a13}
+small{color:#aeb5d2;line-height:1.8;display:block;margin-top:10px}
+footer{text-align:center;color:#888eac;padding:20px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}main{margin:12px auto}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<div class="logo">NOVA AI</div>
-<div class="tag">VIDEO CREATOR STUDIO</div>
-<p>من فكرتك إلى خطة فيديو جاهزة للإنتاج 🎬</p>
+ <div class="logo">NOVA AI</div>
+ <h1>استوديو صناعة الفيديو</h1>
+ <p>اكتب فكرتك، وحدد أسلوب الفيديو، وابدأ رحلة الإنشاء.</p>
 </header>
 
 <section class="panel">
-<h2>اصنع فكرة فيديو جديدة</h2>
-<p class="muted">اكتب فكرتك، وNOVA هيجهز لك سيناريو ومشاهد ووصفًا للإنتاج.</p>
+ <label for="idea">🎬 إيه فكرة الفيديو اللي عايزها؟</label>
+ <textarea id="idea" placeholder="مثال: سر بناء الأهرامات بأسلوب وثائقي مشوّق..."></textarea>
 
-<label for="idea">فكرة الفيديو</label>
-<textarea id="idea" placeholder="مثال: رحلة إلى كوكب غريب في المستقبل..."></textarea>
+ <div class="grid">
+  <div>
+   <label for="duration">مدة الفيديو</label>
+   <select id="duration">
+    <option value="15">15 ثانية</option>
+    <option value="30" selected>30 ثانية</option>
+    <option value="45">45 ثانية</option>
+    <option value="60">دقيقة</option>
+   </select>
+  </div>
+  <div>
+   <label for="style">أسلوب الفيديو</label>
+   <select id="style">
+    <option value="cinematic">سينمائي واقعي</option>
+    <option value="documentary">وثائقي</option>
+    <option value="animation">رسوم متحركة</option>
+    <option value="fantasy">خيالي</option>
+   </select>
+  </div>
+  <div>
+   <label for="language">لغة التعليق الصوتي</label>
+   <select id="language">
+    <option value="ar">العربية</option>
+    <option value="en">الإنجليزية</option>
+   </select>
+  </div>
+  <div>
+   <label for="format">مقاس الفيديو</label>
+   <select id="format">
+    <option value="9:16">عمودي — Shorts</option>
+    <option value="16:9">أفقي — YouTube</option>
+   </select>
+  </div>
+ </div>
 
-<label for="duration">مدة الفيديو</label>
-<select id="duration">
-<option value="30">30 ثانية</option>
-<option value="45" selected>45 ثانية</option>
-<option value="60">60 ثانية</option>
-</select>
-
-<label for="style">أسلوب الفيديو</label>
-<select id="style">
-<option>سينمائي واقعي</option>
-<option>أنيميشن</option>
-<option>وثائقي</option>
-<option>رعب خيالي بدون مشاهد دموية</option>
-<option>معلومات وحقائق</option>
-</select>
-
-<label for="voice">لغة التعليق الصوتي</label>
-<select id="voice">
-<option>العربية</option>
-<option>الإنجليزية</option>
-<option>بدون تعليق صوتي</option>
-</select>
-
-<button class="primary" onclick="createPlan()">جهّز خطة الفيديو ✨</button>
+ <button class="primary" id="generate">✨ ابدأ إنشاء الفيديو</button>
+ <small>يلزم توصيل خادم آمن وخدمة توليد فيديو حقيقية قبل إنشاء المقاطع.</small>
 </section>
 
-<section id="output" class="panel hidden">
-<h2>🎬 خطة فيديو NOVA</h2>
-<p class="muted">راجع الخطة وعدّلها قبل استخدامها في خدمة توليد الفيديو.</p>
-<div id="result" class="result"></div>
-<button class="secondary" onclick="copyPlan()">نسخ الخطة كاملة</button>
-<p id="notice" class="muted"></p>
+<section class="panel">
+ <h2>📽️ نتيجة الإنشاء</h2>
+ <p id="status" role="status" aria-live="polite">فيديوهاتك هتظهر هنا بعد ربط خدمة التوليد.</p>
+ <video id="preview" controls playsinline hidden></video>
+ <a id="download" hidden download="NOVA-video.mp4">
+  <button class="secondary">⬇️ تنزيل الفيديو MP4</button>
+ </a>
 </section>
 
-<footer>NOVA AI Studio · النسخة التجريبية</footer>
+<footer>NOVA AI Studio · مساحة إبداعك تبدأ من هنا</footer>
 </main>
 
 <script>
-let currentPlan = "";
+const $ = id => document.getElementById(id);
+const button = $("generate");
 
-function createPlan(){
- const idea = document.getElementById("idea").value.trim();
- const duration = Number(document.getElementById("duration").value);
- const style = document.getElementById("style").value;
- const voice = document.getElementById("voice").value;
- const output = document.getElementById("output");
- const result = document.getElementById("result");
- const notice = document.getElementById("notice");
+/*
+  بعد تجهيز الخادم، ضع عنوانه هنا.
+  مثال: https://your-server.example.com
+  لا تضع مفتاح API سريًا في هذا الملف.
+*/
+const API_BASE = "";
 
- if(!idea){
-  alert("اكتب فكرة الفيديو الأول يا نجم!");
+button.addEventListener("click", async () => {
+ const idea = $("idea").value.trim();
+
+ if (!idea) {
+  $("status").textContent = "اكتب فكرة الفيديو الأول، وبعدها اضغط إنشاء.";
+  $("idea").focus();
   return;
  }
 
- const count = duration === 30 ? 3 : duration === 45 ? 4 : 5;
- const sceneTime = Math.floor(duration / count);
- const scenes = [];
-
- for(let i=0;i<count;i++){
-  scenes.push(
-   "المشهد "+(i+1)+" ("+(i*sceneTime)+"–"+(i===count-1?duration:(i+1)*sceneTime)+" ثانية):\n"+
-   "اعرض جزءًا بصريًا مختلفًا يخدم الفكرة: "+idea+
-   "\nالأسلوب: "+style+
-   "\nالحركة: حركة كاميرا ناعمة وانتقال مناسب للمشهد.\n"
-  );
+ if (!API_BASE) {
+  $("status").textContent =
+   "الواجهة جاهزة، لكن خدمة توليد الفيديو لم تُربط بعد.\n\n" +
+   "عشان NOVA يصنع فيديو متحرك حقيقي بصوت ويتيح تنزيل MP4، " +
+   "لازم نجهز خادمًا آمنًا ونوصله بخدمة توليد الفيديو. " +
+   "مجرد نشر هذا الملف على GitHub لا ينشئ الفيديو.";
+  return;
  }
 
- currentPlan =
- "NOVA AI — خطة إنتاج فيديو\n\n"+
- "الفكرة: "+idea+"\n"+
- "المدة: "+duration+" ثانية\n"+
- "الأسلوب: "+style+"\n"+
- "لغة الصوت: "+voice+"\n\n"+
- "الافتتاحية:\n"+
- "ابدأ بلقطة جذابة تشد الانتباه وتقدم موضوع الفيديو بسرعة.\n\n"+
- "المشاهد:\n\n"+scenes.join("\n")+
- "\nالتعليق الصوتي:\n"+
- (voice==="بدون تعليق صوتي"?"لا يوجد تعليق صوتي؛ اعتمد على الصورة والموسيقى المناسبة المرخّصة.":"اكتب تعليقًا صوتيًا "+voice+" متوافقًا مع المشاهد، واضحًا ومختصرًا.")+
- "\n\nالنهاية:\nاختم بلقطة تلخص الفكرة وتناسب محتوى يوتيوب.\n\n"+
- "وصف الإنتاج:\n"+
- "أنشئ فيديو "+style+" عن "+idea+
- "، مدته "+duration+" ثانية، بنسبة أبعاد 16:9 للفيديو العادي أو 9:16 للشورتس، مع ثبات شكل الشخصيات والألوان بين المشاهد. تجنب النصوص المشوهة داخل الصورة.";
+ button.disabled = true;
+ button.textContent = "⏳ جاري إرسال طلب الإنشاء...";
+ $("status").textContent = "جاري الاتصال بخدمة توليد الفيديو...";
+ $("preview").hidden = true;
+ $("download").hidden = true;
 
- result.textContent = currentPlan;
- notice.textContent = "هذه خطة إنتاج مولّدة بقوالب محلية، وليست فيديو أو استجابة من نموذج ذكاء اصطناعي متصل.";
- output.classList.remove("hidden");
- output.scrollIntoView({behavior:"smooth",block:"start"});
-}
+ try {
+  const response = await fetch(API_BASE + "/api/generate", {
+   method: "POST",
+   headers: {"Content-Type":"application/json"},
+   body: JSON.stringify({
+    idea,
+    duration: Number($("duration").value),
+    style: $("style").value,
+    language: $("language").value,
+    format: $("format").value
+   })
+  });
 
-async function copyPlan(){
- if(!currentPlan)return;
- const notice = document.getElementById("notice");
- try{
-  await navigator.clipboard.writeText(currentPlan);
-  notice.textContent="تم نسخ الخطة. يمكنك لصقها في المكان الذي تريد.";
- }catch(e){
-  notice.textContent="حدد نص الخطة وانسخه يدويًا من الشاشة.";
+  if (!response.ok) throw new Error("تعذر بدء إنشاء الفيديو.");
+  const data = await response.json();
+  if (!data.id) throw new Error("الخادم لم يُرجع رقم مهمة.");
+
+  $("status").textContent = "تم إرسال الطلب. جاري انتظار الفيديو...";
+  let ready = false;
+
+  for (let i = 0; i < 120; i++) {
+   await new Promise(resolve => setTimeout(resolve, 5000));
+   const result = await fetch(
+    API_BASE + "/api/status/" + encodeURIComponent(data.id)
+   );
+   if (!result.ok) throw new Error("تعذر التحقق من حالة الفيديو.");
+
+   const job = await result.json();
+   $("status").textContent = job.message || "جاري إنشاء الفيديو...";
+
+   if (job.status === "failed")
+    throw new Error(job.message || "فشل إنشاء الفيديو.");
+
+   if (job.status === "completed" && job.videoUrl) {
+    const url = new URL(job.videoUrl, API_BASE);
+    if (url.protocol !== "https:" && url.hostname !== "localhost")
+     throw new Error("رابط الفيديو غير آمن.");
+
+    $("preview").src = url.href;
+    $("preview").hidden = false;
+    $("download").href = url.href;
+    $("download").hidden = false;
+    $("status").textContent = "اكتمل الفيديو! يمكنك مشاهدته وتنزيله.";
+    ready = true;
+    break;
+   }
+  }
+
+  if (!ready) throw new Error("استغرق الإنشاء وقتًا أطول من المتوقع.");
+ } catch (error) {
+  $("status").textContent = "لم يكتمل الإنشاء: " + error.message;
+ } finally {
+  button.disabled = false;
+  button.textContent = "✨ ابدأ إنشاء الفيديو";
  }
-}
+});
 </script>
 </body>
 </html>
